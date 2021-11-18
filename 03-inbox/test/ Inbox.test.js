@@ -7,6 +7,7 @@ const { interface, bytecode } = require("../compile");
 let accounts;
 let inbox;
 const INITIAL_STRING = "Hi there!";
+const CHANGE_STRING = "Bye Lisa";
 
 beforeEach(async () => {
   // Get a list of all accounts
@@ -35,7 +36,13 @@ describe("Inbox", () => {
     );
   });
 
-  it("deploys a contract", () => {
-    // console.log(inbox);
+  it("can change the message", async () => {
+    await inbox.methods.setMessage(CHANGE_STRING).send({ from: accounts[0] });
+    const message = await inbox.methods.message().call();
+    assert.equal(
+      message,
+      CHANGE_STRING,
+      `expected ${CHANGE_STRING} and recieved ${message}`
+    );
   });
 });
